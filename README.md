@@ -3,6 +3,8 @@ Universal PHP mail sending script for any HTML theme
 
 1. html From example
  * for recieve messages form should be inlcude selector *.alerts_box
+ 
+<addr>
 <form class="js-ajax-form">
     <div class="alerts_box"></div>
     <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
@@ -11,8 +13,10 @@ Universal PHP mail sending script for any HTML theme
     <input name="check" type="checkbox" class="form-check-input" id="exampleCheck1">
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+</addr>
 
 2. Jquery example, requred jquery
+<addr>
  * 
  * Set class for forms like "js-ajax-form" or change to another selector
  * in "data_ajax" , define url to php send file
@@ -33,3 +37,4 @@ Universal PHP mail sending script for any HTML theme
         })
     })
 </script>
+</addr>
