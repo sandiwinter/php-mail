@@ -16,7 +16,7 @@ Universal PHP mail sending script for any HTML theme
 </addr>
 
 2. Jquery example, requred jquery
-<addr>
+```javascript
  * 
  * Set class for forms like "js-ajax-form" or change to another selector
  * in "data_ajax" , define url to php send file
@@ -37,4 +37,4 @@ Universal PHP mail sending script for any HTML theme
         })
     })
 </script>
-</addr>
+```
