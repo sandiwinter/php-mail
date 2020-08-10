@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+	<meta charset="UTF-8">
+	<title>Test Mail Send</title> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+<form class="js-ajax-form">
+    <div class="alerts_box"></div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputName">Name</label>
+    <input name="name" type="text" class="form-control" id="exampleInputName" placeholder="Name">
+  </div>
+  <div class="form-group form-check">
+    <input name="check" type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+<script>
+    $('.js-ajax-form').submit(function(e){
+        e.preventDefault();
+        var form = $(this);
+        var data = form.serializeArray();
+        var data_ajax = form.attr('data-ajax') || "../mail_send.php";
+        $.post(data_ajax, data, function(data){
+            /* clear fields is sucess */
+            if(data.success) {
+                form.find('input').val('');
+            }
+            form.find('.alerts_box').html('')
+            if(data.message) {
+                form.find('.alerts_box').html(data.message)
+            }
+        })
+    })
+</script>
+
+</body>
+</html>
