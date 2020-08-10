@@ -1,2 +1,2 @@
 # php-mail
-Universal PHP mail sendinf script for any HTML theme
+Universal PHP mail sending script for any HTML theme
