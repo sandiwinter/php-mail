@@ -45,41 +45,44 @@
 $output = array();
 $output['success'] = true;
 $post = $_POST;
+$error= false;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST) && array_filter($_POST) ) {
     
     $mail = new PHPMailer();
     $mail->IsHTML(true);
     
     /* SMTP config */ 
+    
     /*
     $mail->IsSMTP();
     $mail->SMTPAuth = true;
-    $mail->Host = '';
+    $mail->Host = 'smtp.mailtrap.io';
     $mail->Username = '';
     $mail->Password = ''; 
     $mail->SMTPSecure = 'tls';
     $mail->Port = 465;
     $mail->WordWrap = 50;
-    /*
+    */
+
     /* end SMTP config */
     
     
     /* Deafault config */
-    $mail->From = 'test@test.com';
+    $mail->From = 'no-reply@test.com';
     $mail->FromName = "demouser";
-    $mail->Subject = 'Example Subject';
-    $mail->AddAddress('test@test.com',"Test Name");
-    
+    $mail->Subject = 'Message From Website';
+    if(!$mail->AddAddress('test@test.com'))
+        $error = TRUE;
+
+    if(isset($_POST['Email']))
+    if(!$mail->AddReplyTo($_POST['Email']))
+        $error = TRUE;
     
     // message
     $message = '
     <html>
-    <head>
-      <title>Example Message Title</title>
-    </head>
     <body>
-        <p>From Servicos</p>
         {dynamic_values}                            
     </body>
     </html>
@@ -95,13 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
 
     $mail->Body = $message;
     // Send
-    if($mail->Send()) {
-        $output['message'] = '<div class="alert alert-primary">
-                               Message sent success
-                            </div>';
+    if(!$error && $mail->Send() === TRUE) {
+        $output['message'] = '<div class="alert alert-success">Thanks, we will contact you as soon possible!</div>';
     } else {
-        $output['message'] = '<div class="alert alert-danger" role="alert">Message not sent!</div>';
-        $log = $mail->ErrorInfo;
+        $output['message'] = '<div class="alert alert-danger" role="alert">Message not sent, '.$mail->ErrorInfo.'</div>';
+        $output['success'] = false;
     }
 } else {
     /* error */
@@ -603,7 +604,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw new phpmailerException('Invalid recipient array: ' . $kind);
       }
-      echo $this->Lang('Invalid recipient array').': '.$kind;
+      //echo $this->Lang('Invalid recipient array').': '.$kind;
       return false;
     }
     $address = trim($address);
@@ -613,7 +614,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      echo $this->Lang('invalid_address').': '.$address;
+      //echo $this->Lang('invalid_address').': '.$address;
       return false;
     }
     if ($kind != 'ReplyTo') {
@@ -699,10 +700,10 @@ class PHPMailer {
       if(!$this->PreSend()) return false;
       return $this->PostSend();
     } catch (phpmailerException $e) {
-      $this->SetError($e->getMessage());
-      if ($this->exceptions) {
-        throw $e;
-      }
+      //$this->SetError($e->getMessage());
+      //if ($this->exceptions) {
+      //  throw $e;
+      //}
       return false;
     }
   }
@@ -762,7 +763,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw $e;
       }
-      echo $e->getMessage()."\n";
+      //echo $e->getMessage()."\n";
       return false;
     }
   }
@@ -1612,7 +1613,7 @@ class PHPMailer {
       if ($this->exceptions) {
         throw $e;
       }
-      echo $e->getMessage()."\n";
+      //echo $e->getMessage()."\n";
       if ( $e->getCode() == self::STOP_CRITICAL ) {
         return false;
       }
@@ -3411,7 +3412,5 @@ class SMTP {
   }
 
 }
-
-?>
 
 ?>

@@ -34,20 +34,34 @@
 </div>
 <script>
     $('.js-ajax-form').submit(function(e){
+        
         e.preventDefault();
         var form = $(this);
-        var data = form.serializeArray();
-        var data_ajax = form.attr('data-ajax') || "../mail_send.php";
-        $.post(data_ajax, data, function(data){
-            /* clear fields is sucess */
-            if(data.success) {
+        var form_data = form.serializeArray();
+        var ajax_url = form.attr('data-ajax') || "mail_send.php";
+
+        var original_button_text = form.find('button').html();
+
+        form.find('button').append("...");
+        
+        $.post(ajax_url, form_data, function(response_data){
+            
+            if(response_data.success) {
                 form.find('input').val('');
             }
-            form.find('.alerts_box').html('')
-            if(data.message) {
-                form.find('.alerts_box').html(data.message)
+            form.find('.alerts_box').html('');
+
+            if(response_data.message) {
+                form.find('.alerts_box').html(response_data.message)
             }
-        })
+        }, 'json').fail(function(xhr, status, error) {
+            console.log(xhr.responseText);
+            console.log(error);
+        }).always(function() {
+            form.find('button').html(original_button_text);
+        });
+
+        return false;
     })
 </script>
 
